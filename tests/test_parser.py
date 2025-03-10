@@ -75,3 +75,33 @@ tags {
     }
     actual = parse(input)
     assert actual == expected
+
+
+def test_quoted_entries():
+    input = """errors
+{
+    tags
+    {
+        "physics:time"
+        {
+            error invalid;
+            validValues ( steady fixed );
+            currentValue bananas;
+        }
+    }
+}"""
+
+
+    expected = {
+        "errors": {
+            "tags": {
+                "physics:time": {
+                    "error": "invalid",
+                    "validValues": ["steady", "fixed"],
+                    "currentValue": "bananas",
+                }
+            }
+        }
+    }
+    actual = parse(input)
+    assert actual == expected

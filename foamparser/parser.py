@@ -31,7 +31,6 @@ def proc_dict(tokens) -> Dict[str, Any]:
             "LIST_START",
             "DICT_START",
             "END",
-            "QUOTED_STRING",
         ]:
             # To start a list, or dict, or to complete the values of something,
             # we need to have started something already.
@@ -45,7 +44,10 @@ def proc_dict(tokens) -> Dict[str, Any]:
             else:
                 values.append(token.value)
         elif token.type == "QUOTED_STRING":
-            values.append(token.value[1:-1])
+            if entry is None:
+                entry = token.value[1:-1]
+            else:
+                values.append(token.value[1:-1])
         elif token.type == "LIST_START":
             values.append(proc_list(tokens))
         elif token.type == "DICT_START":
