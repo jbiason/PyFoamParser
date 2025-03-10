@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.0] - 2025-03-10
+
+### 🐛 Bug Fixes
+
+- Fixed an issue when trying to convert numbers into foam
+
 ## [0.4.0] - 2025-03-10
 
 ### 🐛 Bug Fixes
