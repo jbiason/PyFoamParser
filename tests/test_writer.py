@@ -122,3 +122,12 @@ def test_require_quotes():
     expected = '"val.dot" "both-require-quotes";'
     actual = write(input)
     assert actual == expected
+
+def test_numbers():
+    """Checks if we don't try to turn numbers into safe values (which only
+    work for strings).
+    """
+    input = {'a': 1}
+    expected = 'a 1;'
+    actual = write(input)
+    assert actual == expected
