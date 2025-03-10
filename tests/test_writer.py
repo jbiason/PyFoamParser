@@ -104,3 +104,21 @@ cases
 }"""
     actual = write(input)
     assert actual == expected
+
+
+def test_require_quotes():
+    """Checks if values that require quotes are being quoted."""
+    input = {"a": "1.2.3"}
+    expected = 'a "1.2.3";'
+    actual = write(input)
+    assert actual == expected
+
+    input = {"value": "this-has-dashes"}
+    expected = 'value "this-has-dashes";'
+    actual = write(input)
+    assert actual == expected
+
+    input = {'val.dot': 'both-require-quotes'}
+    expected = '"val.dot" "both-require-quotes";'
+    actual = write(input)
+    assert actual == expected
