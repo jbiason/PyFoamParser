@@ -36,6 +36,6 @@ def spacing(level: int) -> str:
 
 def safe_value(value: str) -> str:
     value = value.replace("\n", "\\n")
-    if " " in value or "\\n" in value:
+    if " " in value or "\\n" in value or "-" in value:
         return f'"{value}"'
     return value
