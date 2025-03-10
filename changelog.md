@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.0] - 2025-03-10
+
+### 🐛 Bug Fixes
+
+- Deal with dictionary entries with colons (":") in them
+
 ## [0.3.0] - 2025-03-10
 
 ### 🐛 Bug Fixes
