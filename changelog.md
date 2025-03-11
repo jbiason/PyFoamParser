@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.7.0] - 2025-03-11
+
+### 🐛 Bug Fixes
+
+- Added "_" as a valid element in identifiers
+
 ## [0.6.0] - 2025-03-11
 
 ### 🐛 Bug Fixes
