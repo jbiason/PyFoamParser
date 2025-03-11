@@ -1,7 +1,11 @@
-class UnexpectedToken(Exception):
+class FoamError(Exception):
+    pass
+
+
+class UnexpectedTokenError(FoamError):
     def __init__(self, token):
         self.token = token
 
 
-class InvalidRootElement(Exception):
+class InvalidRootElementError(FoamError):
     pass
