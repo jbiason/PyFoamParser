@@ -91,7 +91,6 @@ def test_quoted_entries():
     }
 }"""
 
-
     expected = {
         "errors": {
             "tags": {
@@ -101,6 +100,56 @@ def test_quoted_entries():
                     "currentValue": "bananas",
                 }
             }
+        }
+    }
+    actual = parse(input)
+    assert actual == expected
+
+
+def test_nested_dicts():
+    input = """cases
+{
+    1
+    {
+        name "case 1";
+        tags
+        {
+            physics
+            {
+                time steady;
+            }
+        }
+    }
+    2
+    {
+        name "case 2";
+        tags
+        {
+            additional
+            {
+                company customer;
+            }
+        }
+    }
+}"""
+    expected = {
+        "cases": {
+            "1": {
+                "name": "case 1",
+                "tags": {
+                    "physics": {
+                        "time": "steady",
+                    }
+                },
+            },
+            "2": {
+                "name": "case 2",
+                "tags": {
+                    "additional": {
+                        "company": "customer",
+                    }
+                },
+            },
         }
     }
     actual = parse(input)

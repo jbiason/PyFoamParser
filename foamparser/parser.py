@@ -38,6 +38,8 @@ def proc_dict(tokens) -> Dict[str, Any]:
         elif token.type == "LIST_END":
             # we don't expect the end of a list while processing a dictionary
             raise UnexpectedToken(token.value)
+        elif token.type == "DICT_END":
+            break
         elif token.type == "IDENTIFIER":
             if entry is None:
                 entry = token.value
