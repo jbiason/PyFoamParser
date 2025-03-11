@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.8.0] - 2025-03-11
+
+### 🚜 Refactor
+
+- The Exceptions produced by PyFoamParser now all have FoamError as base class
+
 ## [0.7.0] - 2025-03-11
 
 ### 🐛 Bug Fixes
