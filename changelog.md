@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.6.0] - 2025-03-11
+
+### 🐛 Bug Fixes
+
+- Fixed an issue processing nested dictionaries
+
 ## [0.5.0] - 2025-03-10
 
 ### 🐛 Bug Fixes
