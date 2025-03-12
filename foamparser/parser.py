@@ -5,7 +5,7 @@ from typing import Dict
 from typing import List
 
 from .tokenizer import FoamLexer
-from .exceptions import UnexpectedToken
+from .exceptions import UnexpectedTokenError
 
 
 logger = logging.getLogger(__name__)
@@ -34,10 +34,10 @@ def proc_dict(tokens) -> Dict[str, Any]:
         ]:
             # To start a list, or dict, or to complete the values of something,
             # we need to have started something already.
-            raise UnexpectedToken(token.value)
+            raise UnexpectedTokenError(token.value)
         elif token.type == "LIST_END":
             # we don't expect the end of a list while processing a dictionary
-            raise UnexpectedToken(token.value)
+            raise UnexpectedTokenError(token.value)
         elif token.type == "DICT_END":
             break
         elif token.type == "IDENTIFIER":
@@ -74,7 +74,7 @@ def proc_list(tokens) -> List[Any]:
     for token in tokens:
         logger.debug("[L] token=%s, value=%s", token.type, token.value)
         if token.type in ["DICT_END", "END"]:
-            raise UnexpectedToken(token.value)
+            raise UnexpectedTokenError(token.value)
         elif token.type == "IDENTIFIER":
             result.append(token.value)
         elif token.type == "DICT_START":

@@ -2,13 +2,13 @@ from typing import Any
 from typing import Dict
 
 
-from .exceptions import InvalidRootElement
+from .exceptions import InvalidRootElementError
 
 
 def write(input: Dict[str, Any]) -> str:
     """Write a Python dictionary into Foam."""
     if not isinstance(input, dict):
-        raise InvalidRootElement
+        raise InvalidRootElementError()
 
     output = []
     proc_dict(input, output, 0)
