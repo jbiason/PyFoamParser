@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.9.0] - 2025-03-12
+
+### 🐛 Bug Fixes
+
+- Fixed issues with the renaming of exceptions
+
 ## [0.8.0] - 2025-03-11
 
 ### 🚜 Refactor
