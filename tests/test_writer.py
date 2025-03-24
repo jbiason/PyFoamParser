@@ -118,16 +118,49 @@ def test_require_quotes():
     actual = write(input)
     assert actual == expected
 
-    input = {'val.dot': 'both-require-quotes'}
+    input = {"val.dot": "both-require-quotes"}
     expected = '"val.dot" "both-require-quotes";'
     actual = write(input)
     assert actual == expected
+
 
 def test_numbers():
     """Checks if we don't try to turn numbers into safe values (which only
     work for strings).
     """
-    input = {'a': 1}
-    expected = 'a 1;'
+    input = {"a": 1}
+    expected = "a 1;"
+    actual = write(input)
+    assert actual == expected
+
+
+def test_empty_value():
+    """Checks if we quote empty values (thus not producing an invalid foam)."""
+    input = {"a": ""}
+    expected = 'a "";'
+    actual = write(input)
+    assert actual == expected
+
+
+def test_not_quite_empty_value():
+    """Checks if we not not quiting "falsy" values when not needed."""
+    input = {"a": 0}
+    expected = "a 0;"
+    actual = write(input)
+    assert actual == expected
+
+
+def test_none():
+    """Checks if we output an empty string when the value is None."""
+    input = {"a": None}
+    expected = 'a "";'
+    actual = write(input)
+    assert actual == expected
+
+
+def test_empty_dict():
+    """Checks if we output an empty dictionary in a single line."""
+    input = {"a": {}}
+    expected = "a {}"
     actual = write(input)
     assert actual == expected
