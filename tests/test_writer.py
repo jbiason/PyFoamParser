@@ -123,6 +123,11 @@ def test_require_quotes():
     actual = write(input)
     assert actual == expected
 
+    input = {"entry": "['example']"}
+    expected = """entry "['example']";"""
+    actual = write(input)
+    assert actual == expected
+
 
 def test_numbers():
     """Checks if we don't try to turn numbers into safe values (which only

@@ -52,6 +52,9 @@ def safe_value(value: str) -> str:
         return value
 
     value = value.replace("\n", "\\n")
-    if not value or any(char in [" ", "\\n", "-", ".", ":"] for char in value):
+    if not value or any(
+        char in [" ", "\\n", "-", ".", ":", "[", "]", "(", ")", "{", "}"]
+        for char in value
+    ):
         return f'"{value}"'
     return value
