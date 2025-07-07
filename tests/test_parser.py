@@ -49,6 +49,13 @@ def test_multiple_simple_elements():
     assert actual == expected
 
 
+def test_quoted():
+    input = 'a "value";'
+    expected = {'a': 'value'}
+    actual = parse(input)
+    assert actual == expected
+
+
 def test_complex_1():
     """Checks a semi-complex input."""
     input = """name "short case name";
@@ -151,6 +158,72 @@ def test_nested_dicts():
                 },
             },
         }
+    }
+    actual = parse(input)
+    assert actual == expected
+
+
+def test_actual():
+    input = """name "GUI-Tutorial-1-Diffuser";
+location "git@bitbucket.org:engys/examples.git";
+lastRun "2024-11-18 11:23:10Z";
+lastVersion "4.3.0";
+tags
+{
+    physics
+    {
+        time                steady;
+        dimensionality      3D;
+        solverType          segregated;
+        density             incompressible;
+        turbulence          on;
+        turbulenceCoeffs
+        {
+            simulationType  RAS;
+            turbulenceModel kOmegaSST;
+        }
+        multiphase          no;
+        multiregion         no;
+        speciesTransport    no;
+        energy              off;
+        referenceFrame      no;
+    }
+ 
+    additional
+    {
+        application ( GUITutorial );
+        CI_systems ( GUIMacro midSizedCoreCI );
+    }
+   
+}
+    """
+    expected = {
+        "name": "GUI-Tutorial-1-Diffuser",
+        "location": "git@bitbucket.org:engys/examples.git",
+        "lastRun": "2024-11-18 11:23:10Z",
+        "lastVersion": "4.3.0",
+        "tags": {
+            "physics": {
+                "time": "steady",
+                "dimensionality": "3D",
+                "solverType": "segregated",
+                "density": "incompressible",
+                "turbulence": "on",
+                "turbulenceCoeffs": {
+                    "simulationType": "RAS",
+                    "turbulenceModel": "kOmegaSST",
+                },
+                "multiphase": "no",
+                "multiregion": "no",
+                "speciesTransport": "no",
+                "energy": "off",
+                "referenceFrame": "no",
+            },
+            "additional": {
+                "application": ["GUITutorial"],
+                "CI_systems": ["GUIMacro", "midSizedCoreCI"],
+            },
+        },
     }
     actual = parse(input)
     assert actual == expected
