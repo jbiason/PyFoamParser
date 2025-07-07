@@ -4,8 +4,10 @@ from typing import Any
 from typing import Dict
 from typing import List
 
-from .tokenizer import FoamLexer
+from .exceptions import UnexpectedCharacterError
 from .exceptions import UnexpectedTokenError
+from .tokenizer import FoamLexer
+from .sly.lex import LexError
 
 
 logger = logging.getLogger(__name__)
@@ -22,49 +24,52 @@ def proc_dict(tokens) -> Dict[str, Any]:
     result = {}
     entry = None
     values = []
-    for token in tokens:
-        logger.debug(
-            "[D] token=%s, value=%s (entry=%s)", token.type, token.value, entry
-        )
+    try:
+        for token in tokens:
+            logger.debug(
+                "[D] token=%s, value=%s (entry=%s)", token.type, token.value, entry
+            )
 
-        if entry is None and token.type in [
-            "LIST_START",
-            "DICT_START",
-            "END",
-        ]:
-            # To start a list, or dict, or to complete the values of something,
-            # we need to have started something already.
-            raise UnexpectedTokenError(token.value)
-        elif token.type == "LIST_END":
-            # we don't expect the end of a list while processing a dictionary
-            raise UnexpectedTokenError(token.value)
-        elif token.type == "DICT_END":
-            break
-        elif token.type == "IDENTIFIER":
-            if entry is None:
-                entry = token.value
-            else:
-                values.append(token.value)
-        elif token.type == "QUOTED_STRING":
-            if entry is None:
-                entry = token.value[1:-1]
-            else:
-                values.append(token.value[1:-1])
-        elif token.type == "LIST_START":
-            values.append(proc_list(tokens))
-        elif token.type == "DICT_START":
-            inner_dict = proc_dict(tokens)
-            result[entry] = inner_dict
-            values = []
-            entry = None
-        elif token.type == "END":
-            if len(values) == 1:
-                # this is just to make things prettier
-                result[entry] = values[0]
-            else:
-                result[entry] = values
-            entry = None
-            values = []
+            if entry is None and token.type in [
+                "LIST_START",
+                "DICT_START",
+                "END",
+            ]:
+                # To start a list, or dict, or to complete the values of something,
+                # we need to have started something already.
+                raise UnexpectedTokenError(token.value)
+            elif token.type == "LIST_END":
+                # we don't expect the end of a list while processing a dictionary
+                raise UnexpectedTokenError(token.value)
+            elif token.type == "DICT_END":
+                break
+            elif token.type == "IDENTIFIER":
+                if entry is None:
+                    entry = token.value
+                else:
+                    values.append(token.value)
+            elif token.type == "QUOTED_STRING":
+                if entry is None:
+                    entry = token.value[1:-1]
+                else:
+                    values.append(token.value[1:-1])
+            elif token.type == "LIST_START":
+                values.append(proc_list(tokens))
+            elif token.type == "DICT_START":
+                inner_dict = proc_dict(tokens)
+                result[entry] = inner_dict
+                values = []
+                entry = None
+            elif token.type == "END":
+                if len(values) == 1:
+                    # this is just to make things prettier
+                    result[entry] = values[0]
+                else:
+                    result[entry] = values
+                entry = None
+                values = []
+    except LexError as exc:
+        raise UnexpectedCharacterError(exc.text[:10], exc.error_index)
 
     return result
 

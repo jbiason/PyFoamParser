@@ -5,6 +5,7 @@ import logging
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from foamparser import parse
+from foamparser import exceptions
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -50,10 +51,21 @@ def test_multiple_simple_elements():
 
 
 def test_quoted():
-    input = 'a "value";'
-    expected = {'a': 'value'}
+    input = 'a "value is quoted";'
+    expected = {"a": "value is quoted"}
     actual = parse(input)
     assert actual == expected
+
+
+def test_invalid_token():
+    input = "a: invalid;"
+    try:
+        parse(input)
+    except exceptions.UnexpectedCharacterError as exc:
+        assert exc.position == 1
+        assert exc.text == ": invalid;"
+        return
+    raise Exception
 
 
 def test_complex_1():
