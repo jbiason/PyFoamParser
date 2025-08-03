@@ -247,3 +247,23 @@ def test_tilde():
     expected = {"~tilde": "2"}
     actual = parse(input)
     assert actual == expected
+
+
+def test_line_comment():
+    """Tests if we can parse line comments correctly."""
+    input = """a 2;
+// and this is ignored
+b 3;"""
+    expected = {"a": "2", "b": "3"}
+    actual = parse(input)
+    assert actual == expected
+
+
+def test_block_comment():
+    """Tests if we can parse block comments correctly."""
+    input = """/* this multiline comments
+must be ignored */
+    a 2;"""
+    expected = {"a": "2"}
+    actual = parse(input)
+    assert actual == expected

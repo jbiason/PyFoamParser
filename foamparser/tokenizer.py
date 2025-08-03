@@ -3,6 +3,8 @@ from .sly import Lexer
 
 class FoamLexer(Lexer):
     tokens = {
+        LINE_COMMENT,
+        BLOCK_COMMENT,
         DICT_START,
         DICT_END,
         LIST_START,
@@ -23,3 +25,7 @@ class FoamLexer(Lexer):
     END = ";"
 
     QUOTED_STRING = r'".*"'
+    IDENTIFIER = r"[a-zA-Z0-9_~]+"
+
+    LINE_COMMENT = r"//.*"
+    BLOCK_COMMENT = r"/\*[\s\S]*\*/"
