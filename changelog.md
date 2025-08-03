@@ -1,5 +1,43 @@
 # Changelog
 
+## [0.14.0] - 2025-08-03
+
+### 🚀 Features
+
+- Parsing comments
+
+### 🐛 Bug Fixes
+
+- Accept "~" as a valid content for an identifier
+
+## [0.13.0] - 2025-07-07
+
+### 🚜 Refactor
+
+- Wrap lexing parsing errors into our own errors
+
+### ⚙️ Miscellaneous Tasks
+
+- Raised the Python version to 3.9 for now
+
+## [0.12.0] - 2025-07-04
+
+### ⚙️ Miscellaneous Tasks
+
+- Reduced minimal Python version
+
+## [0.11.0] - 2025-03-27
+
+### 🐛 Bug Fixes
+
+- Added a few more characters to the list of "require quotation" list
+
+## [0.10.0] - 2025-03-24
+
+### 🐛 Bug Fixes
+
+- Foamparser now deals better when outputing empty values
+
 ## [0.9.0] - 2025-03-12
 
 ### 🐛 Bug Fixes
