@@ -267,3 +267,11 @@ must be ignored */
     expected = {"a": "2"}
     actual = parse(input)
     assert actual == expected
+
+
+def test_dot_values():
+    """Tests if we can parse values with dots in them."""
+    input = "a 0.0000001;"
+    expected = {"a": "0.0000001"}
+    actual = parse(input)
+    assert actual == expected
