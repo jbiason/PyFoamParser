@@ -239,3 +239,11 @@ tags
     }
     actual = parse(input)
     assert actual == expected
+
+
+def test_tilde():
+    """Tests if the parser accepts identifiers with a tilde in them."""
+    input = "~tilde 2;"
+    expected = {"~tilde": "2"}
+    actual = parse(input)
+    assert actual == expected
