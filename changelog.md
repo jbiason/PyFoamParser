@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.15.0] - 2025-08-03
+
+### 🐛 Bug Fixes
+
+- Accept values with dots in them
+
 ## [0.14.0] - 2025-08-03
 
 ### 🚀 Features
