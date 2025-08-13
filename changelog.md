@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.16.0] - 2025-08-13
+
+### 🐛 Bug Fixes
+
+- Entries with multiple quoted values are now threated as multiple values
+
 ## [0.15.0] - 2025-08-03
 
 ### 🐛 Bug Fixes
