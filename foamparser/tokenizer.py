@@ -24,7 +24,7 @@ class FoamLexer(Lexer):
 
     END = ";"
 
-    QUOTED_STRING = r'".*"'
+    QUOTED_STRING = r'"[^"]*"'
     IDENTIFIER = r"[a-zA-Z0-9_~\.]+"
 
     LINE_COMMENT = r"//.*"

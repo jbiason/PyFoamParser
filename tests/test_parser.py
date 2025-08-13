@@ -275,3 +275,10 @@ def test_dot_values():
     expected = {"a": "0.0000001"}
     actual = parse(input)
     assert actual == expected
+
+def test_multiple_quoted_values():
+    """Tests if the parser picks multiple values when they are all quoted."""
+    input = 'a "val1" "val2" "val3";'
+    expected = {'a': ['val1', 'val2', 'val3']}
+    actual = parse(input)
+    assert actual == expected
