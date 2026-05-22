@@ -68,6 +68,12 @@ def proc_dict(tokens) -> Dict[str, Any]:
                     result[entry] = values
                 entry = None
                 values = []
+            elif token.type == "INCLUDE":
+                filename = next(tokens).value
+                _end = next(tokens)
+                if "#includes" not in result:
+                    result["#includes"] = []
+                result["#includes"].append(filename)
     except LexError as exc:
         raise UnexpectedCharacterError(exc.text[:10], exc.error_index)
 
@@ -86,6 +92,10 @@ def proc_list(tokens) -> List[Any]:
             result.append(proc_dict(tokens))
         elif token.type == "LIST_START":
             result.append(proc_list(tokens))
+        elif token.type == "QUOTED_STRING":
+            result.append(token.value[1:-1])
         elif token.type == "LIST_END":
             break
+        else:
+            raise UnexpectedCharacterError(token.value, token.type)
     return result

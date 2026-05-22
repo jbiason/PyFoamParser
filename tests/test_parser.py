@@ -51,6 +51,7 @@ def test_multiple_simple_elements():
 
 
 def test_quoted():
+    """Checks if the parser can properly find strings with quotes, and produce a single result."""
     input = 'a "value is quoted";'
     expected = {"a": "value is quoted"}
     actual = parse(input)
@@ -58,6 +59,8 @@ def test_quoted():
 
 
 def test_invalid_token():
+    """Checks if the parser produces an error in case the content can't be parsed."""
+    # In this case, we are considering ":" an invalid token for a variable.
     input = "a: invalid;"
     try:
         parse(input)
@@ -97,6 +100,7 @@ tags {
 
 
 def test_quoted_entries():
+    """Checks if the parser properly finds entries that are properly quoted to cover invalid identified characters."""
     input = """errors
 {
     tags
@@ -126,6 +130,7 @@ def test_quoted_entries():
 
 
 def test_nested_dicts():
+    """Checks if the library handles dictionaries inside dictionaries."""
     input = """cases
 {
     1
@@ -176,6 +181,7 @@ def test_nested_dicts():
 
 
 def test_actual():
+    """Tests for a fairly complex dictionary."""
     input = """name "GUI-Tutorial-1-Diffuser";
 location "git@bitbucket.org:engys/examples.git";
 lastRun "2024-11-18 11:23:10Z";
@@ -200,13 +206,13 @@ tags
         energy              off;
         referenceFrame      no;
     }
- 
+
     additional
     {
         application ( GUITutorial );
         CI_systems ( GUIMacro midSizedCoreCI );
     }
-   
+
 }
     """
     expected = {
@@ -269,6 +275,17 @@ must be ignored */
     assert actual == expected
 
 
+def test_block_comment2():
+    """Tests if we parse a block comment when it doesn't have any "separators."""
+    input = """/*---------------
+block comment
+-----------*/
+a 1;"""
+    expected = {"a": "1"}
+    actual = parse(input)
+    assert actual == expected
+
+
 def test_dot_values():
     """Tests if we can parse values with dots in them."""
     input = "a 0.0000001;"
@@ -276,9 +293,163 @@ def test_dot_values():
     actual = parse(input)
     assert actual == expected
 
+
 def test_multiple_quoted_values():
     """Tests if the parser picks multiple values when they are all quoted."""
     input = 'a "val1" "val2" "val3";'
-    expected = {'a': ['val1', 'val2', 'val3']}
+    expected = {"a": ["val1", "val2", "val3"]}
+    actual = parse(input)
+    assert actual == expected
+
+
+def test_control_dict():
+    """Tests if the parser properly parses a more complex structure, like a full controlDict."""
+    input = """/*--------------------------------*- C++ -*----------------------------------*\
+|       o          |                                                          |
+|    o     o       | HELYX(R): Open-source CFD for Enterprise                 |
+|   o   O   o      | Version: vd.e.v--Apr22-A10                               |
+|    o     o       | Engys Ltd. http://www.engys.com                          |
+|       o          |                                                          |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class dictionary;
+    location system;
+    object controlDict;
+}
+    application pimpleDyMFoam;
+    startFrom latestTime;
+    startTime 0;
+    stopAt endTime;
+    endTime 10.0;
+    deltaT 0.01;
+    writeControl adjustableRunTime;
+    writeInterval 0.2;
+    purgeWrite 0;
+    writeFormat binary;
+    writePrecision 10;
+    writeCompression uncompressed;
+    writeEndTime true;
+    timeFormat general;
+    timePrecision 6;
+    graphFormat raw;
+    runTimeModifiable yes;
+    adjustTimeStep true;
+    maxCo 1.0;
+    maxDeltaT 1.0;
+    maxAlphaCo 0.0;
+    minDeltaT 1.0E-6;
+    functions
+    {
+        FP
+        {
+            type fieldProcess;
+            regions ( region0 );
+            executeControl writeTime;
+            executeInterval 1;
+            writeControl outputTimeAndEnd;
+            writeInterval 1;
+            operations
+            (
+                {
+                    operation Cp;
+                    fieldName Cp;
+                    write true;
+                    nearCellValue true;
+                    p p;
+                    Uref 1.0;
+                }
+            );
+            functionObjectLibs ( "libfieldFunctionObjects.so" );
+        }
+        IM
+        {
+            type runTimeVisualisation;
+            regions ( region0 );
+            functionObjectLibs ( "librunTimeVisualisation.so" );
+            activeScenes ( transform-symmetry );
+            width 1024;
+            height 768;
+            exportFormats ( png );
+            debug true;
+            parallel true;
+            writeControl writeTime;
+            writeInterval 1;
+            executeControl writeTime;
+            executeInterval 1;
+            #include "postDict";
+        }
+    }
+"""
+    expected = {
+        "FoamFile": {
+            "version": "2.0",
+            "format": "ascii",
+            "class": "dictionary",
+            "location": "system",
+            "object": "controlDict",
+        },
+        "application": "pimpleDyMFoam",
+        "startFrom": "latestTime",
+        "startTime": "0",
+        "stopAt": "endTime",
+        "endTime": "10.0",
+        "deltaT": "0.01",
+        "writeControl": "adjustableRunTime",
+        "writeInterval": "0.2",
+        "purgeWrite": "0",
+        "writeFormat": "binary",
+        "writePrecision": "10",
+        "writeCompression": "uncompressed",
+        "writeEndTime": "true",
+        "timeFormat": "general",
+        "timePrecision": "6",
+        "graphFormat": "raw",
+        "runTimeModifiable": "yes",
+        "adjustTimeStep": "true",
+        "maxCo": "1.0",
+        "maxDeltaT": "1.0",
+        "maxAlphaCo": "0.0",
+        "minDeltaT": "1.0E-6",
+        "functions": {
+            "FP": {
+                "type": "fieldProcess",
+                "regions": ["region0"],
+                "executeControl": "writeTime",
+                "executeInterval": "1",
+                "writeControl": "outputTimeAndEnd",
+                "writeInterval": "1",
+                "operations": [
+                    {
+                        "operation": "Cp",
+                        "fieldName": "Cp",
+                        "write": "true",
+                        "nearCellValue": "true",
+                        "p": "p",
+                        "Uref": "1.0",
+                    }
+                ],
+                "functionObjectLibs": ["libfieldFunctionObjects.so"],
+            },
+            "IM": {
+                "type": "runTimeVisualisation",
+                "regions": ["region0"],
+                "functionObjectLibs": ["librunTimeVisualisation.so"],
+                "activeScenes": ["transform-symmetry"],
+                "width": "1024",
+                "height": "768",
+                "exportFormats": ["png"],
+                "debug": "true",
+                "parallel": "true",
+                "writeControl": "writeTime",
+                "writeInterval": "1",
+                "executeControl": "writeTime",
+                "executeInterval": "1",
+                "#includes": ['"postDict"'],
+            },
+        },
+    }
     actual = parse(input)
     assert actual == expected

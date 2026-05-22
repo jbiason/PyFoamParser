@@ -10,6 +10,7 @@ class FoamLexer(Lexer):
         LIST_START,
         LIST_END,
         END,
+        INCLUDE,
         QUOTED_STRING,
         IDENTIFIER,
     }
@@ -25,7 +26,9 @@ class FoamLexer(Lexer):
     END = ";"
 
     QUOTED_STRING = r'"[^"]*"'
-    IDENTIFIER = r"[a-zA-Z0-9_~\.]+"
+    IDENTIFIER = r"[a-zA-Z0-9_~\.-]+"
 
     LINE_COMMENT = r"//.*"
-    BLOCK_COMMENT = r"/\*[\s\S]*\*/"
+    BLOCK_COMMENT = r"/\*[\s\S\\]*\*/"
+
+    INCLUDE = "#include"
